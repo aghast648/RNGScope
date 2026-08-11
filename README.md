@@ -294,3 +294,13 @@ Potential extensions include:
 - publication-quality benchmark datasets and results
 
 The priority is to establish strong classical baselines and experimentally justified conclusions before increasing model or system complexity.
+
+---
+
+## License
+
+RNGScope is distributed under the **MIT License**. You may use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the project subject to the terms in the repository's `LICENSE` file.
+
+Copies or substantial portions of the project must retain the applicable copyright notice and MIT permission notice. The MIT License is permissive: modified or larger works may be distributed under different terms and are **not required to use the MIT License**, provided the MIT notice requirements for the original licensed material are preserved.
+
+The software is provided **as is**, without warranty. See `LICENSE` for the complete license terms.

@@ -167,7 +167,7 @@ RNGScope/
 │   └── research_plan.md
 │
 ├── notes/
-│   └── information theory Harvard.pdf
+│   └── day-01-information-theory-Harvard.pdf
 │
 ├── src/
 │   ├── generators/

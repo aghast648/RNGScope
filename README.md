@@ -4,7 +4,7 @@
 
 The project combines **information theory, statistical randomness testing, machine learning, and small-scale quantum-computing experiments** in a common evaluation framework. Its main purpose is not to assume that AI or quantum methods are superior, but to test where they provide measurable value compared with conventional techniques.
 
-> **Project status:** early research and implementation stage. The repository structure and research plan are being established before the main experimental pipeline is implemented.
+> **Project status:** early research and implementation stage. The installable package and test scaffolding are in place; the main experimental pipeline is not yet implemented.
 
 ---
 
@@ -160,27 +160,42 @@ The project will place particular emphasis on **generalization**, **reproducibil
 
 ```text
 RNGScope/
-│
+├── .gitignore
+├── LICENSE
 ├── README.md
-├── requirements.txt
 ├── pyproject.toml
+├── requirements.txt
 │
 ├── docs/
 │   └── research_plan.md
-│
 ├── notes/
 │   └── day-01-information-theory-harvard.pdf
 │
 ├── src/
 │   ├── .gitkeep
-│   ├── generators/
-│   │   └── .gitkeep
 │   ├── analysis/
+│   │   └── .gitkeep
+│   ├── generators/
 │   │   └── .gitkeep
 │   ├── models/
 │   │   └── .gitkeep
-│   └── utils/
-│       └── .gitkeep
+│   ├── utils/
+│   │   └── .gitkeep
+│   └── rngscope/
+│       ├── __init__.py
+│       ├── analysis/
+│       │   └── __init__.py
+│       ├── generators/
+│       │   └── __init__.py
+│       ├── models/
+│       │   └── __init__.py
+│       └── utils/
+│           └── __init__.py
+│
+├── tests/
+│   ├── __init__.py
+│   ├── test_analysis.py
+│   └── test_generators.py
 │
 └── experiments/
     ├── .gitkeep
@@ -192,10 +207,12 @@ RNGScope/
 
 ### Directory Roles
 
-- **`src/generators/`** — synthetic data sources and controlled weak generators
-- **`src/analysis/`** — statistical, entropy, correlation, and randomness-analysis tools
-- **`src/models/`** — machine-learning and experimental prediction models
-- **`src/utils/`** — shared utilities, configuration, reproducibility helpers, and data handling
+- **`src/rngscope/generators/`** — installable package for synthetic data sources and controlled weak generators
+- **`src/rngscope/analysis/`** — installable package for statistical, entropy, correlation, and randomness-analysis tools
+- **`src/rngscope/models/`** — installable package for machine-learning and experimental prediction models
+- **`src/rngscope/utils/`** — installable package for shared utilities, configuration, reproducibility helpers, and data handling
+- **`src/{generators,analysis,models,utils}/`** — original empty scaffold directories retained as placeholders
+- **`tests/`** — test-package scaffold for generators and analysis methods
 - **`experiments/notebooks/`** — exploratory analysis and experiment notebooks
 - **`experiments/results/`** — generated plots, tables, metrics, and experiment outputs
 - **`docs/`** — research design, methodology, and technical documentation

@@ -167,7 +167,7 @@ RNGScope/
 │   └── research_plan.md
 │
 ├── notes/
-│   └── .gitkeep
+│   └── information theory Harvard.pdf
 │
 ├── src/
 │   ├── generators/

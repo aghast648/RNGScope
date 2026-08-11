@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=70", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rngscope"
+version = "0.1.0"
+description = "Experimental research toolkit for statistical, machine-learning, and quantum-assisted analysis of synthetic random sequences."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+  { name = "Alireza Ghazanfary" }
+]
+keywords = [
+  "randomness",
+  "information-theory",
+  "entropy",
+  "machine-learning",
+  "quantum-computing",
+  "statistical-testing"
+]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Information Analysis"
+]
+dependencies = [
+  "numpy>=2.0",
+  "scipy>=1.13",
+  "pandas>=2.2",
+  "matplotlib>=3.9",
+  "scikit-learn>=1.5"
+]
+
+[project.optional-dependencies]
+notebooks = [
+  "jupyterlab>=4.2",
+  "ipykernel>=6.29"
+]
+quantum = [
+  "qiskit>=1.2"
+]
+dev = [
+  "pytest>=8.3"
+]
+all = [
+  "jupyterlab>=4.2",
+  "ipykernel>=6.29",
+  "qiskit>=1.2",
+  "pytest>=8.3"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

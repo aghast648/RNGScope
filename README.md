@@ -162,14 +162,17 @@ The project will place particular emphasis on **generalization**, **reproducibil
 RNGScope/
 │
 ├── README.md
+├── requirements.txt
+├── pyproject.toml
 │
 ├── docs/
 │   └── research_plan.md
 │
 ├── notes/
-│   └── day-01-information-theory-Harvard.pdf
+│   └── day-01-information-theory-harvard.pdf
 │
 ├── src/
+│   ├── .gitkeep
 │   ├── generators/
 │   │   └── .gitkeep
 │   ├── analysis/
@@ -180,6 +183,7 @@ RNGScope/
 │       └── .gitkeep
 │
 └── experiments/
+    ├── .gitkeep
     ├── notebooks/
     │   └── .gitkeep
     └── results/

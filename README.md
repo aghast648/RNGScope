@@ -156,17 +156,17 @@ The project will place particular emphasis on **generalization**, **reproducibil
 
 ---
 
-## Reference Environment Smoke Test
+## Environment Smoke Test
 
-RNGScope includes a strict smoke test that checks whether a cloned repository is running in the frozen core reference environment. It compares the active Python and package versions exactly with `requirements-frozen.txt`, verifies the core imports, imports `rngscope`, and performs a tiny NumPy binary-array operation.
+RNGScope includes a minimum-version smoke test for newly cloned environments. It reads the supported Python version and core dependencies directly from `[project]` in `pyproject.toml`, checks that the active versions meet or exceed those lower bounds, verifies the core imports, imports `rngscope`, and performs a tiny NumPy binary-array operation.
 
-From the repository root, create or activate a virtual environment, then install the frozen reference:
+From the repository root, create or activate a virtual environment and install RNGScope with its core dependencies:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -r requirements-frozen.txt
+python -m pip install -e .
 ```
 
 On Windows PowerShell, activate the environment with:
@@ -181,20 +181,28 @@ Run the smoke test:
 python scripts/environment_smoke_test.py
 ```
 
-A matching environment prints one `[PASS]` line for Python, every frozen package, each core import, the RNGScope package import, and the tiny binary-array operation. The last line must be:
+Each compatible version and successful import prints a `[PASS]` line, for example:
+
+```text
+[PASS] numpy: found 2.3.5 (minimum 2.0)
+```
+
+The last line of a successful run is:
 
 ```text
 Environment smoke test: PASS
 ```
 
-A missing or different version is reported explicitly, for example:
+A missing or below-minimum version is reported explicitly, for example:
 
 ```text
-[FAIL] numpy: expected 2.3.5, found 2.3.4
+[FAIL] numpy: requires >=2.0, found 1.26.4
 Environment smoke test: FAIL
 ```
 
-A failure returns process exit code `1`. Install the versions in `requirements-frozen.txt` to correct package mismatches; a Python mismatch requires the exact interpreter version declared at the top of that file. This exact-match check supports reproducibility. A version failure does not by itself prove that another environment is incompatible, and a passing smoke test does not replace the unit tests or establish statistical or cryptographic security.
+A failure returns process exit code `1`. Update the environment with `python -m pip install -e .` and run the test again. Versions newer than the declared minimum pass, so `pyproject.toml` remains the single source of truth instead of duplicating pins in a second file.
+
+The smoke test checks only the core dependencies in `[project].dependencies`; optional groups such as `notebooks`, `quantum`, and `dev` are not required. A passing smoke test is a quick installation check, not a substitute for the unit tests and not evidence of statistical or cryptographic security.
 
 ---
 
@@ -206,7 +214,6 @@ RNGScope/
 ├── LICENSE
 ├── README.md
 ├── pyproject.toml
-├── requirements-frozen.txt
 ├── requirements.txt
 │
 ├── scripts/
@@ -258,8 +265,7 @@ RNGScope/
 - **`src/rngscope/utils/`** — installable package for shared utilities, configuration, reproducibility helpers, and data handling
 - **`src/{generators,analysis,models,utils}/`** — original empty scaffold directories retained as placeholders
 - **`tests/`** — test-package scaffold for generators and analysis methods
-- **`scripts/environment_smoke_test.py`** — strict reference-environment version, import, and tiny-operation check
-- **`requirements-frozen.txt`** — exact Python/package reference used by the smoke test; supported dependency ranges remain in `pyproject.toml`
+- **`scripts/environment_smoke_test.py`** — minimum-version, import, and tiny-operation check driven by `pyproject.toml`
 - **`experiments/notebooks/`** — exploratory analysis and experiment notebooks
 - **`experiments/results/`** — generated plots, tables, metrics, and experiment outputs
 - **`docs/`** — research design, methodology, and technical documentation

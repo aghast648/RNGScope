@@ -156,6 +156,56 @@ The project will place particular emphasis on **generalization**, **reproducibil
 
 ---
 
+## Environment Smoke Test
+
+RNGScope includes a minimum-version smoke test for newly cloned environments. It reads the supported Python version and core dependencies directly from `[project]` in `pyproject.toml`, checks that the active versions meet or exceed those lower bounds, verifies the core imports, imports `rngscope`, and performs a tiny NumPy binary-array operation.
+
+From the repository root, create or activate a virtual environment and install RNGScope with its core dependencies:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e .
+```
+
+On Windows PowerShell, activate the environment with:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Run the smoke test:
+
+```bash
+python scripts/environment_smoke_test.py
+```
+
+Each compatible version and successful import prints a `[PASS]` line, for example:
+
+```text
+[PASS] numpy: found 2.3.5 (minimum 2.0)
+```
+
+The last line of a successful run is:
+
+```text
+Environment smoke test: PASS
+```
+
+A missing or below-minimum version is reported explicitly, for example:
+
+```text
+[FAIL] numpy: requires >=2.0, found 1.26.4
+Environment smoke test: FAIL
+```
+
+A failure returns process exit code `1`. Update the environment with `python -m pip install -e .` and run the test again. Versions newer than the declared minimum pass, so `pyproject.toml` remains the single source of truth instead of duplicating pins in a second file.
+
+The smoke test checks only the core dependencies in `[project].dependencies`; optional groups such as `notebooks`, `quantum`, and `dev` are not required. A passing smoke test is a quick installation check, not a substitute for the unit tests and not evidence of statistical or cryptographic security.
+
+---
+
 ## Repository Structure
 
 ```text
@@ -166,6 +216,8 @@ RNGScope/
 ├── pyproject.toml
 ├── requirements.txt
 │
+├── scripts/
+│   └── environment_smoke_test.py
 ├── docs/
 │   └── research_plan.md
 ├── notes/
@@ -213,6 +265,7 @@ RNGScope/
 - **`src/rngscope/utils/`** — installable package for shared utilities, configuration, reproducibility helpers, and data handling
 - **`src/{generators,analysis,models,utils}/`** — original empty scaffold directories retained as placeholders
 - **`tests/`** — test-package scaffold for generators and analysis methods
+- **`scripts/environment_smoke_test.py`** — minimum-version, import, and tiny-operation check driven by `pyproject.toml`
 - **`experiments/notebooks/`** — exploratory analysis and experiment notebooks
 - **`experiments/results/`** — generated plots, tables, metrics, and experiment outputs
 - **`docs/`** — research design, methodology, and technical documentation

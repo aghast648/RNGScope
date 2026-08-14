@@ -247,6 +247,7 @@ RNGScope/
 ├── tests/
 │   ├── __init__.py
 │   ├── test_analysis.py
+│   ├── test_environment_smoke_test.py
 │   └── test_generators.py
 │
 └── experiments/

@@ -22,6 +22,8 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
 
+from packaging.version import InvalidVersion, Version
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 PYPROJECT_FILE = REPOSITORY_ROOT / "pyproject.toml"
@@ -30,7 +32,6 @@ IMPORT_NAME_OVERRIDES = {
     "scikit-learn": "sklearn",
 }
 NAME_PATTERN = re.compile(r"^([A-Za-z0-9][A-Za-z0-9._-]*)(?:\[[^\]]+\])?(.*)$")
-RELEASE_PATTERN = re.compile(r"^[0-9]+(?:\.[0-9]+)*$")
 
 
 def load_project_requirements(path: Path) -> tuple[str, dict[str, str]]:
@@ -94,23 +95,19 @@ def extract_minimum(specifier: str, label: str) -> str:
     return max(parsed, key=lambda item: item[0])[1]
 
 
-def parse_release(value: str, label: str) -> tuple[int, ...]:
-    """Parse the numeric release versions used by RNGScope's lower bounds."""
-    if not RELEASE_PATTERN.fullmatch(value):
-        raise RuntimeError(
-            f"{label} has unsupported version {value!r}; use a numeric release such as 2.0"
-        )
-    return tuple(int(part) for part in value.split("."))
+def parse_release(value: str, label: str) -> Version:
+    """Parse a PEP 440 version used in a requirement or installed distribution."""
+    try:
+        return Version(value)
+    except InvalidVersion as exc:
+        raise RuntimeError(f"{label} has invalid PEP 440 version {value!r}") from exc
 
 
 def meets_minimum(actual: str, minimum: str) -> bool:
-    """Compare numeric release versions, padding omitted trailing components with zero."""
-    actual_release = parse_release(actual, "installed version")
-    minimum_release = parse_release(minimum, "minimum version")
-    width = max(len(actual_release), len(minimum_release))
-    return actual_release + (0,) * (width - len(actual_release)) >= minimum_release + (
-        0,
-    ) * (width - len(minimum_release))
+    """Compare installed and minimum versions using PEP 440 ordering."""
+    return parse_release(actual, "installed version") >= parse_release(
+        minimum, "minimum version"
+    )
 
 
 def report_version(label: str, minimum: str, actual: str | None) -> bool:
